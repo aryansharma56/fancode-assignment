@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aggregator
+      POSTGRES_USER: aggregator
+      POSTGRES_PASSWORD: aggregator
+    ports:
+      - "5433:5432"   # host 5433 to avoid clashing with a local Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aggregator -d aggregator"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mock-poll-provider:
+    build:
+      context: .
+      args:
+        MODULE: mock-poll-provider
+    environment:
+      # 0 = step only via POST /provider/admin/step (deterministic). Set e.g. 5000 to auto-advance.
+      MOCK_AUTO_ADVANCE_MS: ${MOCK_AUTO_ADVANCE_MS:-0}
+    ports:
+      - "8081:8081"
+
+  aggregator:
+    build:
+      context: .
+      args:
+        MODULE: aggregator
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mock-poll-provider:
+        condition: service_started
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/aggregator
+      DB_USER: aggregator
+      DB_PASSWORD: aggregator
+      PRIMARY_PROVIDER: ${PRIMARY_PROVIDER:-provider-a}
+      PROVIDER_B_BASE_URL: http://mock-poll-provider:8081
+      PROVIDER_B_POLL_INTERVAL_MS: 2000
+    ports:
+      - "8080:8080"
+
+  # Run-once generator: docker compose run --rm mock-push-provider [--scenario=match-timeline]
+  mock-push-provider:
+    profiles: ["push"]
+    build:
+      context: .
+      args:
+        MODULE: mock-push-provider
+    depends_on:
+      - aggregator
+    environment:
+      TARGET_URL: http://aggregator:8080/webhooks/provider-a
+      SCENARIO: worked-example
+
+volumes:
+  pgdata:

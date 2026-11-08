@@ -1,0 +1,12 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: mock-poll-provider
+
+mock:
+  # Scripted timeline for the polled match.
+  timeline: ${MOCK_TIMELINE:classpath:timeline.json}
+  # 0 = only advance via POST /provider/admin/step. >0 = also advance automatically every N ms.
+  auto-advance-ms: ${MOCK_AUTO_ADVANCE_MS:0}

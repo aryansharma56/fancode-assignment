@@ -1,0 +1,76 @@
+{
+  "providerMatchId": "b-match-1001",
+  "balls": [
+    { "key": "4.5@1", "ballId": "inn1-4.5", "sequence": 29, "revision": 1, "innings": 1, "over": 4, "ball": 5,
+      "text": "Short of a length, punched to point. No run.", "occurredAt": "2026-10-22T14:04:20.000Z" },
+    { "key": "4.6@1", "ballId": "inn1-4.6", "sequence": 30, "revision": 1, "innings": 1, "over": 4, "ball": 6,
+      "text": "Flicked off the pads to fine leg for a single.", "occurredAt": "2026-10-22T14:04:50.000Z" },
+    { "key": "5.1@1", "ballId": "inn1-5.1", "sequence": 31, "revision": 1, "innings": 1, "over": 5, "ball": 1,
+      "text": "Overpitched, driven through extra cover for four.", "occurredAt": "2026-10-22T14:05:25.000Z" },
+    { "key": "5.1@2", "ballId": "inn1-5.1", "sequence": 31, "revision": 2, "innings": 1, "over": 5, "ball": 1,
+      "text": "Overpitched, driven on the up, off the outside edge past a diving cover for four.", "occurredAt": "2026-10-22T14:05:25.000Z" },
+    { "key": "5.2@1", "ballId": "inn1-5.2", "sequence": 32, "revision": 1, "innings": 1, "over": 5, "ball": 2,
+      "text": "Bowled him! Full and swinging back, through the gate. OUT.", "occurredAt": "2026-10-22T14:05:55.000Z" },
+    { "key": "5.3@1", "ballId": "inn1-5.3", "sequence": 33, "revision": 1, "innings": 1, "over": 5, "ball": 3,
+      "text": "New batter nudges to midwicket and gets off the mark. One run.", "occurredAt": "2026-10-22T14:06:40.000Z" },
+    { "key": "5.4@1", "ballId": "inn1-5.4", "sequence": 34, "revision": 1, "innings": 1, "over": 5, "ball": 4,
+      "text": "Pulled hard, one bounce over the square-leg rope. Four.", "occurredAt": "2026-10-22T14:07:10.000Z" }
+  ],
+  "steps": [
+    {
+      "name": "initial state",
+      "score": { "sequence": 10, "revision": 1, "status": "live", "innings": 1, "runs": 30, "wickets": 1, "overs": "5.0", "asOf": "2026-10-22T14:05:00.000Z" },
+      "commentary": ["4.5@1", "4.6@1"]
+    },
+    {
+      "name": "unchanged response (identical to step 1)",
+      "score": { "sequence": 10, "revision": 1, "status": "live", "innings": 1, "runs": 30, "wickets": 1, "overs": "5.0", "asOf": "2026-10-22T14:05:00.000Z" },
+      "commentary": ["4.5@1", "4.6@1"]
+    },
+    {
+      "name": "newer score and a new commentary item",
+      "score": { "sequence": 11, "revision": 1, "status": "live", "innings": 1, "runs": 34, "wickets": 1, "overs": "5.1", "asOf": "2026-10-22T14:05:30.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@1"]
+    },
+    {
+      "name": "temporary error: 503 on both endpoints",
+      "scoreError": 503,
+      "commentaryError": 503
+    },
+    {
+      "name": "stale response: older snapshot tuple (10,1) with a more recent asOf",
+      "score": { "sequence": 10, "revision": 1, "status": "live", "innings": 1, "runs": 30, "wickets": 1, "overs": "5.0", "asOf": "2026-10-22T14:05:45.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@1"]
+    },
+    {
+      "name": "wicket: newer score and a new commentary item",
+      "score": { "sequence": 12, "revision": 1, "status": "live", "innings": 1, "runs": 34, "wickets": 2, "overs": "5.2", "asOf": "2026-10-22T14:06:00.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@1", "5.2@1"]
+    },
+    {
+      "name": "commentary correction: ball inn1-5.1 revision 2",
+      "score": { "sequence": 12, "revision": 1, "status": "live", "innings": 1, "runs": 34, "wickets": 2, "overs": "5.2", "asOf": "2026-10-22T14:06:00.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@2", "5.2@1"]
+    },
+    {
+      "name": "gap: ball 5.4 (sequence 34) published before ball 5.3 (sequence 33)",
+      "score": { "sequence": 14, "revision": 1, "status": "live", "innings": 1, "runs": 39, "wickets": 2, "overs": "5.4", "asOf": "2026-10-22T14:07:15.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@2", "5.2@1", "5.4@1"]
+    },
+    {
+      "name": "late ball 5.3 fills the gap",
+      "score": { "sequence": 14, "revision": 1, "status": "live", "innings": 1, "runs": 39, "wickets": 2, "overs": "5.4", "asOf": "2026-10-22T14:07:15.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@2", "5.2@1", "5.3@1", "5.4@1"]
+    },
+    {
+      "name": "score correction: snapshot (14,2) adds a missed leg-bye, 39 -> 40",
+      "score": { "sequence": 14, "revision": 2, "status": "live", "innings": 1, "runs": 40, "wickets": 2, "overs": "5.4", "asOf": "2026-10-22T14:07:40.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@2", "5.2@1", "5.3@1", "5.4@1"]
+    },
+    {
+      "name": "rain: match abandoned",
+      "score": { "sequence": 15, "revision": 1, "status": "abandoned", "innings": 1, "runs": 40, "wickets": 2, "overs": "5.4", "asOf": "2026-10-22T14:30:00.000Z" },
+      "commentary": ["4.5@1", "4.6@1", "5.1@2", "5.2@1", "5.3@1", "5.4@1"]
+    }
+  ]
+}

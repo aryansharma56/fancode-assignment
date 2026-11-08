@@ -1,0 +1,61 @@
+{
+  "name": "worked-example",
+  "description": "The assignment's worked push example, plus a genuine score correction. Expected end state: 11/1 (1.1), balls b1,b2,b3,b4 with b2 at revision 2.",
+  "deliveries": [
+    {
+      "note": "step 1: ordered delivery, snapshot (1,1) 4/0, ball b1",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d1", "occurredAt": "2026-10-22T14:00:24.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 1, "revision": 1, "status": "live", "innings": 1, "runs": 4, "wickets": 0, "overs": "0.4" },
+        "commentary": { "ballId": "b1", "sequence": 1, "revision": 1, "innings": 1, "over": 0, "ball": 4, "text": "Driven through cover for four." }
+      }
+    },
+    {
+      "note": "step 2: ordered delivery, snapshot (2,1) 4/1, ball b2",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d2", "occurredAt": "2026-10-22T14:00:52.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 2, "revision": 1, "status": "live", "innings": 1, "runs": 4, "wickets": 1, "overs": "0.5" },
+        "commentary": { "ballId": "b2", "sequence": 2, "revision": 1, "innings": 1, "over": 0, "ball": 5, "text": "Edged and taken at first slip. Out." }
+      }
+    },
+    {
+      "note": "step 3: repeated deliveryId d2 (a provider retry) - must change nothing",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d2", "occurredAt": "2026-10-22T14:00:52.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 2, "revision": 1, "status": "live", "innings": 1, "runs": 4, "wickets": 1, "overs": "0.5" },
+        "commentary": { "ballId": "b2", "sequence": 2, "revision": 1, "innings": 1, "over": 0, "ball": 5, "text": "Edged and taken at first slip. Out." }
+      }
+    },
+    {
+      "note": "step 4: out-of-order delivery - d4 (sequence 4) arrives before d3",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d4", "occurredAt": "2026-10-22T14:01:48.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 4, "revision": 1, "status": "live", "innings": 1, "runs": 10, "wickets": 1, "overs": "1.1" },
+        "commentary": { "ballId": "b4", "sequence": 4, "revision": 1, "innings": 1, "over": 1, "ball": 1, "text": "Worked into the gap at deep square for two." }
+      }
+    },
+    {
+      "note": "step 5: delayed older snapshot (3,1) - score stays 10/1, late ball b3 is still stored",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d3", "occurredAt": "2026-10-22T14:01:20.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 3, "revision": 1, "status": "live", "innings": 1, "runs": 8, "wickets": 1, "overs": "1.0" },
+        "commentary": { "ballId": "b3", "sequence": 3, "revision": 1, "innings": 1, "over": 0, "ball": 6, "text": "Short and pulled away for four." }
+      }
+    },
+    {
+      "note": "step 6: correction of ball b2 (revision 2) with a repeated, not-newer snapshot (4,1)",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d5", "occurredAt": "2026-10-22T14:02:05.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 4, "revision": 1, "status": "live", "innings": 1, "runs": 10, "wickets": 1, "overs": "1.1" },
+        "commentary": { "ballId": "b2", "sequence": 2, "revision": 2, "innings": 1, "over": 0, "ball": 5, "text": "Edged and taken at first slip. Out. Review stays out." }
+      }
+    },
+    {
+      "note": "step 7: genuine score correction - snapshot (4,2) adds a missed wide, 10/1 -> 11/1",
+      "body": {
+        "provider": "provider-a", "deliveryId": "d6", "occurredAt": "2026-10-22T14:02:30.000Z", "providerMatchId": "a-match-1001",
+        "snapshot": { "sequence": 4, "revision": 2, "status": "live", "innings": 1, "runs": 11, "wickets": 1, "overs": "1.1" }
+      }
+    }
+  ]
+}

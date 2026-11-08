@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: mock-push-provider
+  main:
+    web-application-type: none
+    banner-mode: off
+
+# Override on the command line (--target-url=...) or with env vars (TARGET_URL=...).
+target-url: http://localhost:8080/webhooks/provider-a
+scenario: worked-example
+delay-ms: 300
+max-attempts: 6

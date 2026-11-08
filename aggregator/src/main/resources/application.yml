@@ -1,0 +1,31 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: aggregator
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/aggregator}
+    username: ${DB_USER:aggregator}
+    password: ${DB_PASSWORD:aggregator}
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+aggregator:
+  # Client view precedence: the primary provider's data wins when it has any.
+  primary-provider: ${PRIMARY_PROVIDER:provider-a}
+  provider-b:
+    enabled: ${PROVIDER_B_ENABLED:true}
+    base-url: ${PROVIDER_B_BASE_URL:http://localhost:8081}
+    match-ids: ${PROVIDER_B_MATCH_IDS:b-match-1001}
+    poll-interval-ms: ${PROVIDER_B_POLL_INTERVAL_MS:2000}
+    connect-timeout-ms: 1000
+    read-timeout-ms: 2000
